@@ -6,30 +6,32 @@ import css from "./IconRandomizer.module.css";
 import buttons from "../Buttons/Buttons.module.css";
 
 export const IconRandomizer = () => {
-  //типизируем иконки
   const Icons: { [key: string]: any } = importedIcons;
 
-  //получаем массив строк с именами свойств объекта с иконками
+  //получаем массив строк с ключами объекта с иконками
   const iconKeys = Object.keys(Icons);
 
   //создаем функцию генерации рандомного числа от 0 до числа равному длинне массива
-  const getRandomIndex = () => {
+  const getRandomIndex = (): number => {
     return Math.floor(Math.random() * iconKeys.length);
   };
 
   //используем хук useState для обновления состояния рандомного числа
   const [randomIndex, setRandomIndex] = useState(getRandomIndex());
+  const [loading, setLoading] = useState(false);
 
   //получаем рандомный ключ для объекта с иконками, который  далее подставляем в объект с иконками
   const randomIconKey = iconKeys[randomIndex];
   const randomIcon = Icons[randomIconKey];
 
   //создаем функцию, которая будет отрабатывать при клике на кнопку
-  const getRandomIcon = () => {
+  const getRandomIcon = (): void => {
+    setLoading(true);
     // вешаем задержку в 3 секунды на кнопку, как написано в задании
     setTimeout(() => {
       //в состояние записываем новое рандомное число , от которого зависит индекс элемента в массиве в свою очередь от которого зависит картинка
       setRandomIndex(getRandomIndex());
+      setLoading(false);
     }, 3000);
   };
   return (
@@ -40,6 +42,7 @@ export const IconRandomizer = () => {
         color="black"
       ></FontAwesomeIcon>
       <Buttons
+        disabled={loading}
         name="Show random icon"
         onClick={() => getRandomIcon()}
         className={buttons.button}
