@@ -8,37 +8,36 @@ import * as importedIcons from "@fortawesome/free-regular-svg-icons";
 
 type IconRandomizerProps = Record<string, never>;
 
-export const IconRandomizer = ({}: IconRandomizerProps) => {
-  const icons = importedIcons as { [key: string]: any };
+export const IconRandomizer = (): JSX.Element => {
   const [iconKey, setIconKey] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const icons = importedIcons as { [key: string]: any };
+  const iconKeys = Object.keys(icons);
+  const randomIndex = Math.floor(Math.random() * iconKeys.length);
+  const randomIcon = icons[iconKey];
 
   useEffect(() => {
-    const iconKeys = Object.keys(icons);
-    setIconKey(iconKeys[Math.floor(Math.random() * iconKeys.length)]);
+    setIconKey(iconKeys[randomIndex]);
   }, []);
 
   const getRandomIcon = (): void => {
-    setLoading(true);
+    setIsLoading(true);
     setTimeout(() => {
-      const iconKeys = Object.keys(icons);
-      setIconKey(iconKeys[Math.floor(Math.random() * iconKeys.length)]);
-      setLoading(false);
+      setIconKey(iconKeys[randomIndex]);
+      setIsLoading(false);
     }, 3000);
   };
-
-  const randomIcon = icons[iconKey];
 
   return (
     <div className={css.container}>
       <FontAwesomeIcon icon={randomIcon} size="5x" color="black" />
       <Buttons
-        disabled={loading}
+        disabled={isLoading}
         name="Show random icon"
         onClick={getRandomIcon}
         className={buttons.button}
       />
-      <span>{loading ? "Loading..." : `Icon key: ${iconKey}`}</span>
+      <span>{isLoading ? "Loading..." : `Icon key: ${iconKey}`}</span>
     </div>
   );
 };
