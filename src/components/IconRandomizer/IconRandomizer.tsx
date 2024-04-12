@@ -1,52 +1,44 @@
 import { Buttons } from "../Buttons";
-import * as importedIcons from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useEffect } from "react";
 import css from "./IconRandomizer.module.css";
 import buttons from "../Buttons/Buttons.module.css";
+import * as importedIcons from "@fortawesome/free-regular-svg-icons";
 
-export const IconRandomizer = () => {
-  const Icons: { [key: string]: any } = importedIcons;
+type IconRandomizerProps = Record<string, never>;
 
-  //получаем массив строк с ключами объекта с иконками
-  const iconKeys = Object.keys(Icons);
+export const IconRandomizer = ({}: IconRandomizerProps) => {
+  const icons = importedIcons as { [key: string]: any };
+  const [iconKey, setIconKey] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  //создаем функцию генерации рандомного числа от 0 до числа равному длинне массива
-  const getRandomIndex = (): number => {
-    return Math.floor(Math.random() * iconKeys.length);
-  };
+  useEffect(() => {
+    const iconKeys = Object.keys(icons);
+    setIconKey(iconKeys[Math.floor(Math.random() * iconKeys.length)]);
+  }, []);
 
-  //используем хук useState для обновления состояния рандомного числа
-  const [randomIndex, setRandomIndex] = useState(getRandomIndex());
-  const [loading, setLoading] = useState(false);
-
-  //получаем рандомный ключ для объекта с иконками, который  далее подставляем в объект с иконками
-  const randomIconKey = iconKeys[randomIndex];
-  const randomIcon = Icons[randomIconKey];
-
-  //создаем функцию, которая будет отрабатывать при клике на кнопку
   const getRandomIcon = (): void => {
     setLoading(true);
-    // вешаем задержку в 3 секунды на кнопку, как написано в задании
     setTimeout(() => {
-      //в состояние записываем новое рандомное число , от которого зависит индекс элемента в массиве в свою очередь от которого зависит картинка
-      setRandomIndex(getRandomIndex());
+      const iconKeys = Object.keys(icons);
+      setIconKey(iconKeys[Math.floor(Math.random() * iconKeys.length)]);
       setLoading(false);
     }, 3000);
   };
+
+  const randomIcon = icons[iconKey];
+
   return (
     <div className={css.container}>
-      <FontAwesomeIcon
-        icon={randomIcon}
-        size="5x"
-        color="black"
-      ></FontAwesomeIcon>
+      <FontAwesomeIcon icon={randomIcon} size="5x" color="black" />
       <Buttons
         disabled={loading}
         name="Show random icon"
-        onClick={() => getRandomIcon()}
+        onClick={getRandomIcon}
         className={buttons.button}
       />
+      <span>{loading ? "Loading..." : `Icon key: ${iconKey}`}</span>
     </div>
   );
 };
