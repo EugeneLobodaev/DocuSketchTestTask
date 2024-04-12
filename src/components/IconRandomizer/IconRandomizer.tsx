@@ -6,8 +6,6 @@ import css from "./IconRandomizer.module.css";
 import buttons from "../Buttons/Buttons.module.css";
 import * as importedIcons from "@fortawesome/free-regular-svg-icons";
 
-type IconRandomizerProps = Record<string, never>;
-
 export const IconRandomizer = (): JSX.Element => {
   const [iconKey, setIconKey] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
