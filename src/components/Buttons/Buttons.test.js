@@ -3,10 +3,12 @@ import { Buttons } from "./Buttons";
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 
+describe("testing Buttons React Component", () => {
+    test("renders button with correct text", () => {
+        const buttonText = "Click me";
+        render(<Buttons name={buttonText} />);
+        const buttonElement = screen.getByText(buttonText);
+        expect(buttonElement).toBeInTheDocument()
+    });
 
-test("renders button with correct text", () => {
-    const buttonText = "Click me";
-    render(<Buttons name={buttonText} />);
-    const buttonElement = screen.getByText(buttonText);
-    expect(buttonElement).toBeInTheDocument()
-});
+})
